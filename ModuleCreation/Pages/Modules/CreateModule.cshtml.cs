@@ -17,7 +17,7 @@ namespace ModuleCreation.Pages.Modules
         public Module ModuleObject { get; set; }
 
         public List<int> Level = new List<int> { 4, 5, 6, 7 }; //initialise the list 
-        public string[] Year = new string[4] { "1", "2", "3", "4" }; //initialise the array - uses checkbox
+        public List<string> Year = new List<string>{ "1", "2", "3", "4" }; //initialise the array - uses checkbox
      
         public List<SelectListItem> Course = new List<SelectListItem>
         {
@@ -29,17 +29,18 @@ namespace ModuleCreation.Pages.Modules
 
         public string[] StatusOfModule = new string[2] { "Active", "Not-Active" };
 
+        /*
         [BindProperty]
         public List<bool> ModYearIsCheck { get; set; } = new List<bool>() {false, false, false, false };
 
         [BindProperty]
         public List<string> ModCourseIsSelect { get; set; } = new List<string>();
+        */
 
         public void OnGet()
         {
             Console.WriteLine("Onget loaded");
-            Console.WriteLine("Year len : "+ModYearIsCheck.Count);
-            Console.WriteLine("Course len : " + ModCourseIsSelect.Count);
+          
 
         }
 
@@ -76,7 +77,7 @@ namespace ModuleCreation.Pages.Modules
 
 
 
-            string DbConnection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=C:\USERS\ZAIRU\SOURCE\REPOS\MODULECREATION\CREATEMODULE.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            string DbConnection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=C:\USERS\ZAIRU\SOURCE\REPOS\MODULECREATION\MODULECREATION\DATA\CREATEMODULE.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             SqlConnection conn = new SqlConnection(DbConnection);
             conn.Open();
 
