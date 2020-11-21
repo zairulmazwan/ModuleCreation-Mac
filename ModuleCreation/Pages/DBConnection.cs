@@ -10,7 +10,7 @@ namespace ModuleCreation.Pages
 
         public string DbString()
         {
-            string dbString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=C:\USERS\ZAIRU\SOURCE\REPOS\MODULECREATION\MODULECREATION\DATA\CREATEMODULE.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            string dbString = "/Users/zairulmazwan/Projects/ModuleCreation/ModuleCreation/Data/ModuleCreationMac.db";
             return dbString;
         }
     }

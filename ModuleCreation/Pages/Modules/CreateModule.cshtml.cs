@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.Sqlite;
 using ModuleCreation.Models;
 
 namespace ModuleCreation.Pages.Modules
@@ -29,14 +30,7 @@ namespace ModuleCreation.Pages.Modules
 
         public string[] StatusOfModule = new string[2] { "Active", "Not-Active" };
 
-        /*
-        [BindProperty]
-        public List<bool> ModYearIsCheck { get; set; } = new List<bool>() {false, false, false, false };
-
-        [BindProperty]
-        public List<string> ModCourseIsSelect { get; set; } = new List<string>();
-        */
-
+        
         public void OnGet()
         {
             Console.WriteLine("Onget loaded");
@@ -77,13 +71,19 @@ namespace ModuleCreation.Pages.Modules
 
 
 
-            string DbConnection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=C:\USERS\ZAIRU\SOURCE\REPOS\MODULECREATION\MODULECREATION\DATA\CREATEMODULE.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            SqlConnection conn = new SqlConnection(DbConnection);
-            conn.Open();
+            var connectionStringBuilder = new SqliteConnectionStringBuilder();
+            DBConnection DBCon = new DBConnection(); // your own class and method in DatabaseConnection folder
+            string dbStringConnection = DBCon.DbString();
 
-            using (SqlCommand command = new SqlCommand ())
-            {
-                command.Connection = conn;
+            connectionStringBuilder.DataSource = dbStringConnection;
+            var connection = new SqliteConnection(connectionStringBuilder.ConnectionString);
+
+            connection.Open();
+
+            var command = connection.CreateCommand();
+
+            
+
                 command.CommandText = @"INSERT INTO Module (ModuleCode, ModuleName, ModuleLevel, ModuleYear, ModuleCourse, ModuleOfferStatus) VALUES (@ModCode, @ModName, @ModLevel, @ModYear, @ModCourse, @ModStat)";
 
                 command.Parameters.AddWithValue("@ModCode",ModuleObject.ModuleCode);
@@ -94,7 +94,7 @@ namespace ModuleCreation.Pages.Modules
                 command.Parameters.AddWithValue("@ModStat", ModuleObject.ModuleOfferStatus);
 
                 command.ExecuteNonQuery();
-            }
+            
 
            return RedirectToPage("/Index");
         }

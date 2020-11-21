@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Data.Sqlite;
 using ModuleCreation.Models;
 
 namespace ModuleCreation.Pages.Modules
@@ -21,32 +22,36 @@ namespace ModuleCreation.Pages.Modules
 
 
         public List<string> StatusItems { get; set; } = new List<string> { "Active", "Not-Active","Suspended" };
-
+        
         public IActionResult OnGet()
         {
-            string DbConnection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=C:\USERS\ZAIRU\SOURCE\REPOS\MODULECREATION\MODULECREATION\DATA\CREATEMODULE.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            SqlConnection conn = new SqlConnection(DbConnection);
-            conn.Open();
+            var connectionStringBuilder = new SqliteConnectionStringBuilder();
+            DBConnection DBCon = new DBConnection(); // your own class and method in DatabaseConnection folder
+            string dbStringConnection = DBCon.DbString();
 
-            using (SqlCommand command = new SqlCommand())
-            {
-                command.Connection = conn;
-                command.CommandText = "SELECT * FROM Module";
+            connectionStringBuilder.DataSource = dbStringConnection;
+            var connection = new SqliteConnection(connectionStringBuilder.ConnectionString);
 
-                if (!string.IsNullOrEmpty(Status))
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = "SELECT * FROM Module";
+
+                if (!string.IsNullOrEmpty(Status) && Status!="All")
                 {
                     command.CommandText += " WHERE ModuleOfferStatus = @stat";
                     command.Parameters.AddWithValue("@stat", Status);
                 }
-               
 
-                SqlDataReader reader = command.ExecuteReader();
+
+                var reader = command.ExecuteReader();
 
                 Records = new List<Module>(); //create the object to collect records
                 
                 while (reader.Read())
                 {
                     Module rec = new Module() ;
+                    rec.Id = reader.GetInt32(0);
                     rec.ModuleCode = reader.GetString(1);
                     rec.ModuleName = reader.GetString(2);
                     rec.ModuleLevel = reader.GetInt32(3);
@@ -57,8 +62,7 @@ namespace ModuleCreation.Pages.Modules
                     Records.Add(rec);
                 }
 
-                reader.Close();
-            }
+           
 
 
 
