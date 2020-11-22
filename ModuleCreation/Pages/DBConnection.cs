@@ -10,7 +10,7 @@ namespace ModuleCreation.Pages
 
         public string DbString()
         {
-            string dbString = "/Users/zairulmazwan/Projects/ModuleCreation/ModuleCreation/Data/ModuleCreationMac.db";
+            string dbString = "/Users/zairulmazwan/Projects/Week9A/ModuleCreation-Mac/ModuleCreation/Data/ModuleCreationMac.db";
             return dbString;
         }
     }
